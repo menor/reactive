@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Observer</title>
+</head>
+<body>
+  <script>
+    'use strict';
+
+    function Producer() {
+      // We keep an internal list of our subscribers
+      this.observers = []
+    }
+
+    Producer.prototype.add = function (observer) {
+      this.observers.push(observer)
+    }
+
+    Producer.prototype.remove = function (observer) {
+      var index = this.observers.indexOf(observer)
+      this.observers.splice(index, 1)
+    }
+
+    Producer.prototype.notify = function (message) {
+      // When we call this method it willl pass the message
+      // as an argument to all of its subscribers update method
+      this.observers.forEach(function (observer) {
+        observer.update(message)
+      })
+    }
+
+    var observer1 = {
+      update: function update(message) {
+        console.log('Observer 1 got:', message)
+      }
+    }
+
+    var observer2 = {
+      update: function update(message) {
+        console.log('Observer 2 got:', message)
+      }
+    }
+
+    var notifier = new Producer()
+    notifier.add(observer1)
+    notifier.add(observer2)
+    // This will get passed to all of its subscribers
+    notifier.notify('I am Alive!!!')
+  </script>
+</body>
+</html>
